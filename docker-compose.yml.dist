@@ -5,43 +5,51 @@ services:
   mysql:
     image: mysql:5.7
     ports:
-      - 3306:3306
+    - 3306:3306
     environment:
-      - MYSQL_DATABASE=database
-      - MYSQL_ROOT_PASSWORD=root_pass
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=pass
+    - MYSQL_DATABASE=database
+    - MYSQL_ROOT_PASSWORD=root_pass
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=pass
     volumes:
-      - ./databases/mysql:/var/lib/mysql
-      - ./logs/mysql:/var/log/mysql
+    - ./databases/mysql:/var/lib/mysql
+    - ./logs/mysql:/var/log/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - 8080:80
+    - 8080:80
     environment:
-      - PMA_HOST=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=root_pass
+    - PMA_HOST=mysql
+    - PMA_USER=root
+    - PMA_PASSWORD=root_pass
+
+  socket:
+    build:
+      context: socket
+    ports:
+    - 8080:8080
+    depends_on:
+    - laravel
 
   laravel:
     image: evilfreelancer/dockavel:5.7.0
     restart: unless-stopped
     links:
-      - mysql
+    - mysql
     ports:
-      - 80:80
+    - 80:80
     volumes:
-      - ./laravel/app:/app/app:rw
-      - ./laravel/config:/app/config:rw
-      - ./laravel/database:/app/database:rw
-      - ./laravel/public:/app/public:rw
-      - ./laravel/resources:/app/resources:rw
-      - ./laravel/routes:/app/routes:rw
-      # Required modules for system
-      - ./laravel/composer.json:/app/composer.json:rw
-      - ./laravel/vendor:/app/vendor:rw
-      - ./laravel/node_modules:/app/node_modules:rw
-      # Following folders must be writable in container for apache user
-      - ./laravel/storage:/app/storage:rw
-      - ./laravel/bootstrap:/app/bootstrap:rw
+    - ./laravel/app:/app/app:rw
+    - ./laravel/config:/app/config:rw
+    - ./laravel/database:/app/database:rw
+    - ./laravel/public:/app/public:rw
+    - ./laravel/resources:/app/resources:rw
+    - ./laravel/routes:/app/routes:rw
+    # Required modules for system
+    - ./laravel/composer.json:/app/composer.json:rw
+    - ./laravel/vendor:/app/vendor:rw
+    - ./laravel/node_modules:/app/node_modules:rw
+    # Following folders must be writable in container for apache user
+    - ./laravel/storage:/app/storage:rw
+    - ./laravel/bootstrap:/app/bootstrap:rw
