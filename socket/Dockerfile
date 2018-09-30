@@ -1,0 +1,8 @@
+FROM alpine:3.8
+
+WORKDIR /opt
+RUN apk add --update --no-cache nodejs npm \
+ && npm install
+
+EXPOSE 8080
+ENTRYPOINT ["npm", "run", "start"]
