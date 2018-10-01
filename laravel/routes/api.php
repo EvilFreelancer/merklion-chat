@@ -21,9 +21,7 @@ use App\Models\Users;
 //});
 
 Route::prefix('messages')->group(function () {
-    Route::get('{room_id}', function($room_id) {
-        return Messages::where('room_id', '=' ,$room_id)->orderBy('created_at', 'desc')->limit(8)->get();
-    });
+    Route::get('{room_id}', '\App\Http\Controllers\Messages@get');
 });
 
 Route::prefix('rooms')->group(function () {

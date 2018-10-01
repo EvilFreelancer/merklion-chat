@@ -13,5 +13,6 @@ class RoomsTableSeeder extends Seeder
     public function run()
     {
         Rooms::create(['title' => 'General']);
+        Rooms::create(['title' => 'Offtop']);
     }
 }

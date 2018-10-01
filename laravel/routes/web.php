@@ -11,16 +11,20 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function() {
     return redirect('rooms');
 });
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => 'web'], function() {
     Route::auth();
     Route::get('/rooms', 'Home@index');
     Route::get('/rooms/{room}', 'Home@index');
 
     Route::post('/messages', 'Messages@create');
+
+    Route::get('/user/info', function() {
+        return \App\Models\Users::where(['id' => \Auth::user()->id])->get();
+    });
 });
 
 Auth::routes();

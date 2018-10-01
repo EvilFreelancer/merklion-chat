@@ -3,7 +3,7 @@
         <div class="card-header">List of messages in "{{room.title}}" room</div>
         <div class="list-group">
             <div class="list-group-item" v-for="message in messages" :message="message">
-                {{message.body}}: {{message.body}}
+                <strong>{{ message.username }}:</strong> {{ message.body }}
             </div>
         </div>
         <div class="card-footer">
@@ -34,32 +34,27 @@
     export default {
         data() {
             return {
-                user: [],
                 room: [],
                 messages: [],
-                message: [],
+                message: null,
             };
         },
         props: {
             room_id: String,
         },
         methods: {
-            getUser: async function () {
-                const {data} = await axios.get(`/api/users`);
-                this.user = data;
-            },
             getRoom: async function () {
                 const {data} = await axios.get(`/api/rooms/` + this.room_id);
                 this.room = data;
             },
             getMessages: async function () {
-                const {data} = await axios.get(`/api/messages/` + this.room_id, {limit: 10});
-                this.messages = data;
+                const {data} = await axios.get(`/api/messages/` + this.room_id);
+                this.messages = data.reverse();
             },
             sendMessage: async function () {
-                let message = {body: this.message, room_id: this.room_id};
-                await axios.post(`/messages`, message);
-                this.messages.push(message);
+                let message = {'body': this.message, 'room_id': this.room_id};
+                const {data} = await axios.post(`/messages`, message);
+                this.messages.push(data);
                 this.message = null;
             }
         },
@@ -67,9 +62,12 @@
             ChatInput
         },
         mounted() {
-            this.getUser();
             this.getRoom();
             this.getMessages();
-        }
+        },
+        // updated() {
+        //     let elem = this.$el;
+        //     elem.scrollTop = elem.clientHeight;
+        // },
     }
 </script>
