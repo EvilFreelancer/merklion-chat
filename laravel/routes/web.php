@@ -12,16 +12,14 @@
 */
 
 Route::get('/', function () {
-    return redirect('home');
+    return redirect('rooms');
 });
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
-    Route::get('/home', 'Home@index');
+    Route::get('/rooms', 'Home@index');
 });
 
 Route::post('send', 'Chat@send');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
