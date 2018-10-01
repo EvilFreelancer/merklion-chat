@@ -21,30 +21,9 @@ use App\Models\Users;
 //});
 
 Route::prefix('messages')->group(function () {
-
-    Route::get('', function() {
-        return Messages::all();
+    Route::get('{room_id}', function($room_id) {
+        return Messages::where('room_id', '=' ,$room_id)->orderBy('created_at', 'desc')->limit(8)->get();
     });
-
-    Route::get('{id}', function($id) {
-        return Messages::find($id);
-    });
-
-    Route::post('', function(Request $request) {
-        return Messages::create($request->all);
-    });
-
-    Route::put('{id}', function(Request $request, $id) {
-        $article = Messages::findOrFail($id);
-        $article->update($request->all());
-        return $article;
-    });
-
-    Route::delete('{id}', function($id) {
-        Messages::find($id)->delete();
-        return 204;
-    });
-
 });
 
 Route::prefix('rooms')->group(function () {
@@ -57,21 +36,6 @@ Route::prefix('rooms')->group(function () {
         return Rooms::find($id);
     });
 
-    Route::post('', function(Request $request) {
-        return Rooms::create($request->all);
-    });
-
-    Route::put('{id}', function(Request $request, $id) {
-        $article = Rooms::findOrFail($id);
-        $article->update($request->all());
-        return $article;
-    });
-
-    Route::delete('{id}', function($id) {
-        Rooms::find($id)->delete();
-        return 204;
-    });
-
 });
 
 Route::prefix('users')->group(function () {
@@ -82,21 +46,6 @@ Route::prefix('users')->group(function () {
 
     Route::get('{id}', function($id) {
         return Users::find($id);
-    });
-
-    Route::post('', function(Request $request) {
-        return Users::create($request->all);
-    });
-
-    Route::put('{id}', function(Request $request, $id) {
-        $article = Users::findOrFail($id);
-        $article->update($request->all());
-        return $article;
-    });
-
-    Route::delete('{id}', function($id) {
-        Users::find($id)->delete();
-        return 204;
     });
 
 });
