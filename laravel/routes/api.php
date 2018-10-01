@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\Rooms;
+use App\Models\Messages;
+use App\Models\Users;
 
 /*
 |--------------------------------------------------------------------------
