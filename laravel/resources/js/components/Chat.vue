@@ -3,7 +3,14 @@
         <div class="card-header">List of messages in "{{room.title}}" room</div>
         <div class="list-group">
             <div class="list-group-item" v-for="message in messages" :message="message">
-                <strong>{{ message.username }}:</strong> {{ message.body }}
+
+                <div v-if="undefined !== message.username">
+                    <strong>{{ message.username }}:</strong> {{ message.body }}
+                </div>
+                <div v-else>
+                    <small>{{ message.body }}</small>
+                </div>
+
             </div>
         </div>
         <div class="card-footer">
@@ -36,10 +43,11 @@
 
         data() {
             return {
+                user: [],
                 room: [],
                 messages: [],
                 message: null,
-                socket: io('localhost:8080')
+                socket: null,
             };
         },
         props: {
@@ -60,7 +68,12 @@
                 this.messages.push(data);
                 this.socket.emit('message', data);
                 this.message = null;
-            }
+            },
+            getUser: async () => {
+                const {data} = await axios.get(`/users/info`);
+                this.user = data;
+                return data;
+            },
         },
         comments: {
             ChatInput
@@ -69,14 +82,33 @@
             this.getRoom();
             this.getMessages();
 
-            this.socket.on('connect', () => {
-                // Connected, let's sign-up for to receive messages for this room
-                this.socket.emit('room', this.room_id);
+            // Get information about current user the connect to socket
+            this.getUser().then((user) => {
+
+                // Connect to socket server and send information about current user
+                this.socket = io('localhost:8080');
+
+                // Change the room after connect and send message about connecting
+                this.socket.on('connect', () => {
+                    // Connected, let's sign-up for to receive messages for this room
+                    this.socket.emit('room', this.room_id);
+
+                    // Send message about connecting
+                    this.socket.emit('message', {'connected': user.name, 'room_id': this.room_id});
+
+                });
+
+                this.socket.on('disconnect', () => {
+                    this.socket.emit('message', {'disconnected': user.name, 'room_id': this.room_id});
+                });
+
+                // Add message from redis to array of messages
+                this.socket.on('message', (data) => {
+                    this.messages.push(data);
+                });
+
             });
 
-            this.socket.on('message', (data) => {
-                this.messages.push(data);
-            });
         }
     }
 </script>

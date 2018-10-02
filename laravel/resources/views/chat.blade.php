@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container" id="app-chat">
+        <input type="hidden" ref="username" value="{{ Auth::user()->name }}">
         <div class="card">
             <div class="card-body">
                 @if (session('status'))
