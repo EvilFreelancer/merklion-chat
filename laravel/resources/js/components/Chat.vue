@@ -30,13 +30,16 @@
 
 <script>
     import ChatInput from './Input';
+    import io from 'socket.io-client';
 
     export default {
+
         data() {
             return {
                 room: [],
                 messages: [],
                 message: null,
+                socket: io('localhost:8080')
             };
         },
         props: {
@@ -55,6 +58,7 @@
                 let message = {'body': this.message, 'room_id': this.room_id};
                 const {data} = await axios.post(`/messages`, message);
                 this.messages.push(data);
+                this.socket.emit('message', data);
                 this.message = null;
             }
         },
@@ -64,10 +68,15 @@
         mounted() {
             this.getRoom();
             this.getMessages();
-        },
-        // updated() {
-        //     let elem = this.$el;
-        //     elem.scrollTop = elem.clientHeight;
-        // },
+
+            this.socket.on('connect', () => {
+                // Connected, let's sign-up for to receive messages for this room
+                this.socket.emit('room', this.room_id);
+            });
+
+            this.socket.on('message', (data) => {
+                this.messages.push(data);
+            });
+        }
     }
 </script>
