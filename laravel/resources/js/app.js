@@ -28,22 +28,22 @@ const router = new VueRouter({
     routes: routes
 });
 
-Vue.mixin({
-    data() {
-        return {
-            user: [],
-        };
-    },
-    methods: {
-        getUser: async function () {
-            const {data} = await axios.get(`/user/info`);
-            this.user = data[0];
-        }
-    },
-    mounted() {
-        this.getUser();
-    }
-});
+// Vue.mixin({
+//     data() {
+//         return {
+//             user: [],
+//         };
+//     },
+//     methods: {
+//         getUser: async function () {
+//             const {data} = await axios.get(`/user/info`);
+//             this.user = data[0];
+//         }
+//     },
+//     mounted() {
+//         this.getUser();
+//     }
+// });
 
 new Vue({
     router: router,

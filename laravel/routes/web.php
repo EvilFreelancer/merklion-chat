@@ -16,15 +16,32 @@ Route::get('/', function() {
 });
 
 Route::group(['middleware' => 'web'], function() {
+
     Route::auth();
-    Route::get('/rooms', 'Home@index');
-    Route::get('/rooms/{room}', 'Home@index');
 
-    Route::post('/messages', 'Messages@create');
-
-    Route::get('/user/info', function() {
-        return \App\Models\Users::where(['id' => \Auth::user()->id])->get();
+    Route::prefix('/rooms')->group(function () {
+        // Open VueJS application
+        Route::get('', 'Rooms@index');
+        // Alias for VueJS
+        Route::get('{room_id}', 'Rooms@index');
     });
+
+    Route::prefix('/messages')->group(function () {
+        // Get a list of all messages in room
+        Route::get('{room_id}', 'Messages@get');
+        // Create new in room
+        Route::post('', 'Messages@create');
+    });
+
+    Route::prefix('/users')->group(function () {
+
+        // Get user's profile information
+        Route::get('profile', function() {
+            return 'profile';
+        })->name('profile');
+
+    });
+
 });
 
 Auth::routes();

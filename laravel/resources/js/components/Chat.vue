@@ -48,7 +48,7 @@
                 this.room = data;
             },
             getMessages: async function () {
-                const {data} = await axios.get(`/api/messages/` + this.room_id);
+                const {data} = await axios.get(`/messages/` + this.room_id);
                 this.messages = data.reverse();
             },
             sendMessage: async function () {

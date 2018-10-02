@@ -20,10 +20,6 @@ use App\Models\Users;
 //    return $request->user();
 //});
 
-Route::prefix('messages')->group(function () {
-    Route::get('{room_id}', '\App\Http\Controllers\Messages@get');
-});
-
 Route::prefix('rooms')->group(function () {
 
     Route::get('', function() {
