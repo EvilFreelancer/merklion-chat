@@ -10,7 +10,7 @@
             </div>
             <div class="form-group">
                 <?php if ($user->avatar) :?>
-                <img class="img-thumbnail" src="<?php echo \Storage::url($user->avatar); ?>"/>
+                <img style="max-width: 200px; max-height: 200px;" class="img-thumbnail" src="<?php echo \Storage::url($user->avatar); ?>"/>
                 <?php endif;?>
                 <label for="avatar" class="control-label"><b>{{ __('Avatar (optional)') }}</b></label>
                 <input id="avatar" type="file" class="form-control" name="avatar">

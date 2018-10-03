@@ -15,6 +15,8 @@ class Messages
 
         if (MessagesModel::create($message)) {
             $message['username'] = \Auth::user()->name;
+            $message['email'] = \Auth::user()->email;
+            $message['avatar'] = $this->fixPath(\Auth::user()->avatar);
         } else {
             $message = null;
         }
@@ -22,13 +24,32 @@ class Messages
         return $message;
     }
 
+    /**
+     * Fix from public to storage
+     *
+     * @param   string $path
+     * @return  null|string|string[]
+     */
+    private function fixPath(string $path = null)
+    {
+        return preg_replace('/^public\//', '/storage/', $path);
+    }
+
     public function get($room_id)
     {
-        return MessagesModel::select(['messages.*', 'u.name as username'])
+        $messages = MessagesModel::select(['messages.*', 'u.name as username', 'u.email', 'u.avatar'])
             ->orderBy('created_at', 'desc')
             ->where(['room_id' => $room_id])
             ->leftjoin('users as u', 'u.id', '=', 'messages.user_id')
-            ->limit(8)->get();
+            ->limit(8)->get()->toArray();
+
+        return array_map(
+            function($message) {
+                $message['avatar'] = $this->fixPath($message['avatar']);
+                return $message;
+            },
+            $messages
+        );
     }
 
 }

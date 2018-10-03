@@ -1,18 +1,29 @@
 <template>
     <div class="card card-default">
         <div class="card-header">List of messages in "{{room.title}}" room</div>
-        <div class="list-group">
-            <div class="list-group-item" v-for="message in messages" :message="message">
 
-                <div v-if="undefined !== message.username">
-                    <strong>{{ message.username }}:</strong> {{ message.body }}
+        <div class="card-body">
+
+            <div v-for="message in messages" :message="message">
+                <div class="media border p-3" v-if="undefined !== message.username">
+                    <div v-if="message.avatar !== undefined && message.avatar.length > 1">
+                        <img v-bind:src="message.avatar" v-bind:alt="message.username"
+                             class="mr-3 mt-3 rounded-circle" style="width:60px;"/>
+                    </div>
+                    <div v-else>
+                        <gravatar :email="message.email" class="mr-3 mt-3 rounded-circle" style="width:60px;"/>
+                    </div>
+                    <div class="media-body">
+                        <h5>{{ message.username }}</h5>
+                        <p>{{ message.body }}</p>
+                    </div>
                 </div>
                 <div v-else>
                     <small>{{ message.body }}</small>
                 </div>
-
             </div>
         </div>
+
         <div class="card-footer">
             <form class="input-group" @submit.prevent="sendMessage">
                 <textarea class="form-control" id="body" v-model="message"></textarea>
@@ -29,7 +40,7 @@
         resize: none;
     }
 
-    .list-group {
+    .card-body {
         overflow: auto;
         height: 500px;
     }

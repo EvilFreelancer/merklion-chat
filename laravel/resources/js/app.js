@@ -2,6 +2,7 @@ import Boot from './bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
+import Gravatar from 'vue-gravatar';
 
 // Main application
 import App from './App';
@@ -11,6 +12,8 @@ import Chat from './components/Chat'
 Vue
     .use(VueRouter)
     .use(VueResource);
+
+Vue.component('gravatar', Gravatar);
 
 // Default configs
 Vue.prototype.API = 'http://localhost/api';

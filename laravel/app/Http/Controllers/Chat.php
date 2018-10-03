@@ -11,12 +11,4 @@ class Chat extends Controller
     {
         $this->middleware('auth');
     }
-
-    public function send()
-    {
-        $redis = Redis::connection();
-        $data = ['message' => Request::input('message'), 'user' => Request::input('user')];
-        $redis->publish('message', json_encode($data));
-        return response()->json([]);
-    }
 }

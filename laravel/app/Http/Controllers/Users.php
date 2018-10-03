@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Users as UsersModel;
+use Compolomus\Compomage\Image;
 
 class Users extends Controller
 {
@@ -49,6 +50,7 @@ class Users extends Controller
         $this->validate($request, [
             'name' => 'required|max:255|unique:users,name,' . $user->id,
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
         ]);
 
         // storing the input fields name & email in variable $input, type array
