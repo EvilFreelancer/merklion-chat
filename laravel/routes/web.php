@@ -41,10 +41,9 @@ Route::group(['middleware' => 'web'], function() {
         });
 
         // Get user's profile information
-        Route::get('profile', function() {
-            return 'profile';
-        })->name('profile');
-
+        Route::get('profile', 'Users@index')->name('profile');
+        // Update user's profile information
+        Route::put('update', 'Users@update');
     });
 
 });

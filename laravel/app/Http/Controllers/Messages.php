@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Messages as MessagesModel;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class Messages
