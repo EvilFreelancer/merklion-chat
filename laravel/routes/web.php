@@ -35,6 +35,10 @@ Route::group(['middleware' => 'web'], function() {
 
     Route::prefix('/users')->group(function () {
 
+        Route::get('', function() {
+            return redirect('/users/profile');
+        });
+
         // Get information about current user
         Route::get('info', function() {
             return \Auth::user();

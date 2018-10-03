@@ -59,10 +59,10 @@ class Users extends Controller
         $user->email = $input['email'];
 
         // Save file to local public storage
-        $path = $request->file('avatar')->store('public');
-        if (null !== $path) {
+        $file = $request->file('avatar');
+        if (null !== $file) {
             // Set path of avatar
-            $user->avatar = $path;
+            $user->avatar = $file->store('public');
         }
 
         $user->save();
