@@ -2,6 +2,11 @@ version: "2"
 
 services:
 
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
   mysql:
     image: mysql:5.7
     ports:
@@ -29,8 +34,11 @@ services:
       context: socket
     ports:
     - 8080:8080
+#    volumes:
+#    - ./socket:/opt:rw
     depends_on:
     - laravel
+    - redis
 
   laravel:
     image: evilfreelancer/dockavel:5.7.0
@@ -40,16 +48,18 @@ services:
     ports:
     - 80:80
     volumes:
-    - ./laravel/app:/app/app:rw
-    - ./laravel/config:/app/config:rw
-    - ./laravel/database:/app/database:rw
-    - ./laravel/public:/app/public:rw
-    - ./laravel/resources:/app/resources:rw
-    - ./laravel/routes:/app/routes:rw
-    # Required modules for system
-    - ./laravel/composer.json:/app/composer.json:rw
-    - ./laravel/vendor:/app/vendor:rw
-    - ./laravel/node_modules:/app/node_modules:rw
-    # Following folders must be writable in container for apache user
-    - ./laravel/storage:/app/storage:rw
-    - ./laravel/bootstrap:/app/bootstrap:rw
+    - ./laravel:/app:rw
+    - ./logs/laravel:/var/log/apache2:rw
+#    - ./laravel/app:/app/app:rw
+#    - ./laravel/config:/app/config:rw
+#    - ./laravel/database:/app/database:rw
+#    - ./laravel/public:/app/public:rw
+#    - ./laravel/resources:/app/resources:rw
+#    - ./laravel/routes:/app/routes:rw
+#    # Required modules for system
+#    - ./laravel/composer.json:/app/composer.json:rw
+#    - ./laravel/vendor:/app/vendor:rw
+#    - ./laravel/node_modules:/app/node_modules:rw
+#    # Following folders must be writable in container for apache user
+#    - ./laravel/storage:/app/storage:rw
+#    - ./laravel/bootstrap:/app/bootstrap:rw
