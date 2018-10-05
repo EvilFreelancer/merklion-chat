@@ -47,6 +47,17 @@ End exit from container
 
     exit
 
+### 3. Set up the application
+
+Login into container
+
+    docker-compose exec laravel bash
+
+Create database and seed tables
+
+    php artisan migrate
+    php artisan db:seed
+
 ## The End
 
 Now you just need open following page http://localhost in your browser
