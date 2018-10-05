@@ -2,6 +2,14 @@
 
 # Merklion Chat Demo App
 
+This chat application based on Docker containers, here is the list:
+
+* mysql - Database server
+* phpmyadmin - For management of MySQL
+* redis - Was added for support of multirooms
+* socket - Socket.IO server for communication between clients
+* laravel - Login pages, API and VueJS
+
 ## How to use
 
 ### 1. Preparation
